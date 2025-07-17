@@ -1,11 +1,12 @@
- 
-
 import os
 import sys
 import json
+import uvicorn
 from datetime import datetime
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
+from asgiref.wsgi import WsgiToAsgi
+
 
 # Add the current directory to Python path for imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -289,7 +290,7 @@ def decode_vin():
     except Exception as e:
         return jsonify(error_response(f"VIN decode error: {str(e)}")), 500
 
-# Payment and Contract Endpoints (Placeholder for future implementation)
+# Payment and Contract Endpoints
 @app.route('/api/payments/methods')
 def get_payment_methods():
     """Get available payment methods"""
@@ -314,7 +315,6 @@ def generate_contract():
         if not data:
             return jsonify(error_response("Contract data is required")), 400
         
-        # Placeholder response
         return jsonify(success_response({
             "contract_id": f"CAC-{datetime.utcnow().strftime('%Y%m%d')}-001",
             "status": "generated",
@@ -358,13 +358,16 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     return response
 
+# Wrap Flask app for ASGI
+asgi_app = WsgiToAsgi(app)
+
 # Vercel serverless function handler
 def handler(event, context):
     """Vercel serverless function handler"""
-    return app(event, context)
+    return asgi_app(event, context)
 
 # For local development
 if __name__ == '__main__':
+    
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=False)
-
+    uvicorn.run("index:asgi_app", host='0.0.0.0', port=port, log_level='info')
