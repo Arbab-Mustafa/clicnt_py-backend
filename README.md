@@ -4,9 +4,10 @@
 
 This is the backend API server for ConnectedAutoCare.com, built with Python Flask and optimized for Vercel serverless deployment. The API provides comprehensive rating engines for Hero protection products and Vehicle Service Contracts (VSCs).
 
-## Architecture
+## Architecture d
 
 ### Serverless Design
+
 - **Entry Point**: `api/index.py` serves as the main Flask application
 - **Modular Services**: Separate rating engines for different product types
 - **Static Data**: Rate cards and vehicle classification stored as Python modules
@@ -15,22 +16,26 @@ This is the backend API server for ConnectedAutoCare.com, built with Python Flas
 ### Key Components
 
 #### Services (`api/services/`)
+
 - `hero_rating_service.py` - Hero products rating engine
 - `vsc_rating_service.py` - VSC rating and pricing calculations
 - `vin_decoder_service.py` - Vehicle identification and validation
 
 #### Data (`api/data/`)
+
 - `hero_products_data.py` - Hero products catalog and pricing
 - `vsc_rates_data.py` - VSC rate cards and vehicle classification
 - `vehicle_data.py` - Vehicle makes, models, and classification
 
 #### Utilities (`api/utils/`)
+
 - `response_helpers.py` - Standardized API response formatting
 - `validation.py` - Input validation and sanitization
 
 ## API Endpoints
 
 ### Health Check
+
 ```
 GET /health
 Response: {"status": "healthy", "message": "ConnectedAutoCare API is running"}
@@ -39,6 +44,7 @@ Response: {"status": "healthy", "message": "ConnectedAutoCare API is running"}
 ### Hero Products
 
 #### Get All Products
+
 ```
 GET /api/hero/products
 Response: {
@@ -58,6 +64,7 @@ Response: {
 ```
 
 #### Generate Quote
+
 ```
 POST /api/hero/quote
 Content-Type: application/json
@@ -87,6 +94,7 @@ Response: {
 ### Vehicle Service Contracts
 
 #### Generate VSC Quote
+
 ```
 POST /api/vsc/quote
 Content-Type: application/json
@@ -106,7 +114,7 @@ Response: {
   "data": {
     "vehicle_info": {
       "make": "Honda",
-      "model": "Accord", 
+      "model": "Accord",
       "year": 2020,
       "class": "A"
     },
@@ -124,6 +132,7 @@ Response: {
 ### VIN Decoder
 
 #### Decode VIN
+
 ```
 POST /api/vin/decode
 Content-Type: application/json
@@ -149,6 +158,7 @@ Response: {
 ## Local Development
 
 ### Setup
+
 ```bash
 # Install dependencies
 pip install -r requirements.txt
@@ -162,6 +172,7 @@ python api/index.py
 ```
 
 ### Testing
+
 ```bash
 # Test health endpoint
 curl http://localhost:5000/health
@@ -178,6 +189,7 @@ curl -X POST http://localhost:5000/api/hero/quote \
 ## Deployment
 
 ### Vercel Configuration
+
 The `vercel.json` file configures the deployment:
 
 ```json
@@ -200,6 +212,7 @@ The `vercel.json` file configures the deployment:
 ```
 
 ### Environment Variables
+
 Set these in Vercel dashboard:
 
 ```
@@ -210,6 +223,7 @@ SECRET_KEY=your-secret-key-here
 ```
 
 ### Dependencies
+
 The `requirements.txt` includes:
 
 ```
@@ -222,6 +236,7 @@ requests==2.31.0
 ## Data Models
 
 ### Hero Products
+
 ```python
 {
     "id": "product_identifier",
@@ -240,6 +255,7 @@ requests==2.31.0
 ```
 
 ### VSC Rates
+
 ```python
 {
     "coverage_level": "silver|gold|platinum",
@@ -251,19 +267,20 @@ requests==2.31.0
 ```
 
 ### Vehicle Classification
+
 ```python
 {
     "class_a": [
-        "Honda", "Toyota", "Nissan", "Hyundai", "Kia", 
+        "Honda", "Toyota", "Nissan", "Hyundai", "Kia",
         "Lexus", "Mazda", "Mitsubishi", "Subaru"
     ],
     "class_b": [
-        "Ford", "Chevrolet", "Buick", "Chrysler", "Dodge", 
-        "GMC", "Jeep", "Mercury", "Oldsmobile", "Plymouth", 
+        "Ford", "Chevrolet", "Buick", "Chrysler", "Dodge",
+        "GMC", "Jeep", "Mercury", "Oldsmobile", "Plymouth",
         "Pontiac", "Saturn"
     ],
     "class_c": [
-        "BMW", "Mercedes-Benz", "Audi", "Cadillac", "Lincoln", 
+        "BMW", "Mercedes-Benz", "Audi", "Cadillac", "Lincoln",
         "Volkswagen", "Volvo"
     ]
 }
@@ -272,6 +289,7 @@ requests==2.31.0
 ## Error Handling
 
 ### Standard Error Response
+
 ```json
 {
   "success": false,
@@ -284,6 +302,7 @@ requests==2.31.0
 ```
 
 ### Common Error Codes
+
 - `INVALID_INPUT` - Missing or invalid request parameters
 - `PRODUCT_NOT_FOUND` - Requested product does not exist
 - `RATING_ERROR` - Error in pricing calculation
@@ -293,12 +312,14 @@ requests==2.31.0
 ## Performance
 
 ### Optimization Features
+
 - **Cold Start Optimization**: Minimal imports and lazy loading
 - **Caching**: Static data cached in memory
 - **Efficient Calculations**: Optimized rating algorithms
 - **Response Compression**: Automatic gzip compression
 
 ### Monitoring
+
 - Vercel provides automatic function monitoring
 - Response times typically under 200ms
 - Automatic scaling based on demand
@@ -307,6 +328,7 @@ requests==2.31.0
 ## Security
 
 ### CORS Configuration
+
 ```python
 CORS(app, origins=[
     "https://connectedautocare.com",
@@ -316,6 +338,7 @@ CORS(app, origins=[
 ```
 
 ### Input Validation
+
 - All inputs validated and sanitized
 - SQL injection prevention (though no database used)
 - XSS protection through proper encoding
@@ -338,6 +361,7 @@ CORS(app, origins=[
 **Solution**: Verify input data format and product configuration
 
 ### Debugging
+
 ```python
 # Enable debug logging
 import logging
@@ -353,12 +377,14 @@ print(f"Debug: {variable_name}")
 ## Contributing
 
 ### Code Style
+
 - Follow PEP 8 Python style guidelines
 - Use type hints where appropriate
 - Add docstrings to all functions
 - Keep functions focused and modular
 
 ### Testing
+
 ```python
 # Add unit tests for new features
 def test_hero_quote_generation():
@@ -373,6 +399,7 @@ def test_hero_quote_generation():
 ```
 
 ### Deployment
+
 1. Test locally first
 2. Commit changes to GitHub
 3. Vercel automatically deploys
@@ -382,4 +409,3 @@ def test_hero_quote_generation():
 ---
 
 **ConnectedAutoCare.com Backend** - Professional API for Protection Plans
-
