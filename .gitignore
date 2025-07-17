@@ -1,0 +1,46 @@
+venv/
+.env
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Testing and coverage
+coverage/
+*.lcov
+*.coverage
+
+# Dependency directories (general)
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Project-specific sensitive files
+.env.example  # If you don’t want to commit the example file
+*.sqlite3     # If using SQLite for the backend
+*.db
