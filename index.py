@@ -1,12 +1,10 @@
 import os
 import sys
 import json
-import uvicorn
 from datetime import datetime
 from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 from asgiref.wsgi import WsgiToAsgi
-
 
 # Add the current directory to Python path for imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -22,7 +20,6 @@ try:
     from utils.response_helpers import success_response, error_response
 except ImportError as e:
     print(f"Import warning: {e}")
-    # Create fallback classes to prevent crashes
     class HeroRatingService:
         def generate_quote(self, *args, **kwargs):
             return {"success": False, "error": "Service temporarily unavailable"}
@@ -139,13 +136,11 @@ def generate_hero_quote():
         if not data:
             return jsonify(error_response("Request body is required")), 400
         
-        # Validate required fields
         required_fields = ['product_type', 'term_years']
         missing_fields = [field for field in required_fields if field not in data]
         if missing_fields:
             return jsonify(error_response(f"Missing required fields: {', '.join(missing_fields)}")), 400
         
-        # Generate quote
         quote_result = hero_service.generate_quote(
             product_type=data['product_type'],
             term_years=data['term_years'],
@@ -195,13 +190,11 @@ def generate_vsc_quote():
         if not data:
             return jsonify(error_response("Request body is required")), 400
         
-        # Validate required fields
         required_fields = ['make', 'year', 'mileage']
         missing_fields = [field for field in required_fields if field not in data]
         if missing_fields:
             return jsonify(error_response(f"Missing required fields: {', '.join(missing_fields)}")), 400
         
-        # Generate quote
         quote_result = vsc_service.generate_quote(
             make=data['make'],
             model=data.get('model', ''),
@@ -244,14 +237,12 @@ def validate_vin():
         
         vin = data['vin'].strip().upper()
         
-        # Basic VIN validation
         if len(vin) != 17:
             return jsonify(error_response("VIN must be exactly 17 characters")), 400
         
         if not vin.isalnum():
             return jsonify(error_response("VIN must contain only letters and numbers")), 400
         
-        # Check for invalid characters (I, O, Q not allowed in VIN)
         invalid_chars = set('IOQ') & set(vin)
         if invalid_chars:
             return jsonify(error_response(f"VIN contains invalid characters: {', '.join(invalid_chars)}")), 400
@@ -275,11 +266,9 @@ def decode_vin():
         
         vin = data['vin'].strip().upper()
         
-        # Validate VIN first
         if len(vin) != 17:
             return jsonify(error_response("Invalid VIN length")), 400
         
-        # Decode VIN
         decode_result = vin_service.decode_vin(vin)
         
         if decode_result.get('success'):
@@ -361,13 +350,8 @@ def after_request(response):
 # Wrap Flask app for ASGI
 asgi_app = WsgiToAsgi(app)
 
-# Vercel serverless function handler
-def handler(event, context):
-    """Vercel serverless function handler"""
-    return asgi_app(event, context)
-
 # For local development
 if __name__ == '__main__':
-    
+    import uvicorn
     port = int(os.environ.get('PORT', 5000))
     uvicorn.run("index:asgi_app", host='0.0.0.0', port=port, log_level='info')
