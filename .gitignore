@@ -29,8 +29,6 @@ pip-delete-this-directory.txt
 dist/
 build/
 *.egg
-
-# Flask-specific
 instance/  # Flask instance folder for configuration or SQLite
 *.sqlite3
 *.db
