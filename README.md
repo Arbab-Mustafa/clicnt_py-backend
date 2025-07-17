@@ -409,3 +409,25 @@ def test_hero_quote_generation():
 ---
 
 **ConnectedAutoCare.com Backend** - Professional API for Protection Plans
+
+## Railway Deployment
+
+### Requirements
+
+- Ensure your working directory is `backend/` (where `index.py` and `Procfile` are).
+- Your `Procfile` must contain:
+  ```
+  web: uvicorn index:asgi_app --host 0.0.0.0 --port $PORT
+  ```
+- Do **not** use `python index.py` or `uvicorn index:app ...` as the start command.
+- In the Railway dashboard, set the Start Command to:
+  ```
+  uvicorn index:asgi_app --host 0.0.0.0 --port $PORT
+  ```
+- Python version is set in `runtime.txt` (e.g., `python-3.12.0`).
+
+### Troubleshooting
+
+- If you see `TypeError: Flask.__call__() missing 1 required positional argument: 'start_response'`, Railway is running the wrong command or in the wrong directory.
+- Always deploy from the `backend` directory, not the project root.
+- If using Docker, ensure the entrypoint is the same as above.
