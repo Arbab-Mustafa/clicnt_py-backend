@@ -33,7 +33,7 @@ This is the backend API server for ConnectedAutoCare.com, built with Python Flas
 - `validation.py` - Input validation and sanitization
 
 ## API Endpoints
-
+  
 ### Health Check
 
 ```
